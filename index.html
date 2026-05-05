@@ -48,14 +48,14 @@
             border-top: 4px solid #b38728;
         }
 
-        /* Ad Overlay Styles - Clean Header with Dark Text */
+        /* Simplified Ad Overlay */
         #adOverlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #fff;
+            background: #000;
             z-index: 50;
             display: flex;
             flex-direction: column;
@@ -65,26 +65,28 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .ad-header {
-            background: #ffffff;
-            border-bottom: 2px solid #f1f5f9;
-            padding: 12px 20px;
+            background: #000;
+            padding: 14px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: #1a1a1a;
-            z-index: 60;
+            border-bottom: 1px solid #333;
             flex-shrink: 0;
         }
-        .ad-timer-pill {
-            background: #fffbeb;
-            border: 1px solid #b38728;
-            color: #b38728;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 11px;
-            font-weight: 800;
+        .ad-text-gold {
+            color: #FFD700;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.02em;
+            font-size: 13px;
+        }
+        .ad-timer-gold {
+            color: #FFD700;
+            font-weight: 900;
+            font-size: 12px;
+            border: 1px solid #FFD700;
+            padding: 2px 10px;
+            border-radius: 4px;
         }
         
         .ad-embed-area {
@@ -161,7 +163,7 @@
                     <h4 class="font-bold text-slate-900 border-b pb-1 mb-3 uppercase text-[11px] tracking-widest">2. Parameter Permutations</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px]">
                         <div class="space-y-3">
-                            <h5 class="font-bold text-slate-800 text-xs uppercase">Primary Actions</h5>
+                            <h5 class="font-bold text-slate-800 text-xs uppercase text-xs">Primary Actions</h5>
                             <ul class="space-y-2">
                                 <li><code>&_ap</code> — Auto-load with Ads</li>
                                 <li><code>&_apn</code> — Auto-load (No Ads)</li>
@@ -170,10 +172,6 @@
                             </ul>
                         </div>
                     </div>
-                </section>
-                <section class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
-                    <h4 class="font-bold text-yellow-800 text-xs uppercase mb-1">Interaction Feature</h4>
-                    <p class="text-[11px] text-yellow-700">Right-clicking on the page opens the original video source on YouTube.</p>
                 </section>
             </div>
             <div class="p-4 border-t bg-slate-50 flex justify-end">
@@ -278,14 +276,14 @@
         const infoModal = document.getElementById('infoModal');
 
         const ADS_LIST = [
-            { title: "Visit LUXWORLD+", url: "https://www.luxworldplus.com", image: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=1638", tag: "LUXWORLD+" },
-            { title: "Chase United Cards", url: "https://www.luxworldplus.com/offers/chase/united", image: "https://images.unsplash.com/photo-1556388158-158ea5ccacbd?auto=format&fit=crop&q=80&w=1600", tag: "AVIATION" },
-            { title: "AMEX Gold", url: "https://www.luxworldplus.com/offers/amex", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1470", tag: "DINING" },
-            { title: "AMEX Platinum Card", url: "https://www.luxworldplus.com/offers/amex", image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&q=80&w=1600", tag: "PREMIUM" },
-            { title: "Chase Sapphire", url: "https://www.luxworldplus.com/offers/chase", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&q=80&w=1470", tag: "TRAVEL" },
-            { title: "Venture X", url: "https://www.luxworldplus.com/offers/capital-one", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=1470", tag: "REWARDS" },
-            { title: "Hilton AMEX", url: "https://www.luxworldplus.com/offers/amex/hilton", image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=1470", tag: "HOTELS" },
-            { title: "Delta AMEX", url: "https://www.luxworldplus.com/offers/amex/delta", image: "https://images.unsplash.com/photo-1464013778555-8e723c2f01f8?auto=format&fit=crop&q=80&w=1470", tag: "SKYMILES" }
+            { title: "Visit LUXWORLD+", description: "Luxury travel tips, points, and miles mastery.", url: "https://www.luxworldplus.com", image: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=1638", tag: "OFFICIAL" },
+            { title: "Chase United Cards", description: "Earn United Miles with a Chase United Card.", url: "https://www.luxworldplus.com/offers/chase/united", image: "https://images.unsplash.com/photo-1556388158-158ea5ccacbd?auto=format&fit=crop&q=80&w=1600", tag: "AVIATION" },
+            { title: "AMEX Gold", description: "4x points on dining and groceries. Best for foodies.", url: "https://www.luxworldplus.com/offers/amex", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1470", tag: "DINING" },
+            { title: "AMEX Platinum Card", description: "Earn 80k points with the ultimate travel card.", url: "https://www.luxworldplus.com/offers/amex", image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&q=80&w=1600", tag: "PREMIUM" },
+            { title: "Chase Sapphire", description: "The gold standard for travel rewards cards.", url: "https://www.luxworldplus.com/offers/chase", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&q=80&w=1470", tag: "TRAVEL" },
+            { title: "Venture X", description: "2x and more rewards on every purchase.", url: "https://www.luxworldplus.com/offers/capital-one", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=1470", tag: "REWARDS" },
+            { title: "Hilton AMEX", description: "Want status quickly? Get a Hilton Card.", url: "https://www.luxworldplus.com/offers/amex/hilton", image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=1470", tag: "HOTELS" },
+            { title: "Delta AMEX", description: "15% off award flights. Get your Delta Card Now.", url: "https://www.luxworldplus.com/offers/amex/delta", image: "https://images.unsplash.com/photo-1464013778555-8e723c2f01f8?auto=format&fit=crop&q=80&w=1470", tag: "SKYMILES" }
         ];
 
         window.addEventListener('contextmenu', (e) => {
@@ -348,11 +346,10 @@
             
             adContainer.innerHTML = `
                 <div class="ad-header">
-                    <div class="flex items-center gap-3">
-                        <span class="bg-[#b38728] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">${adData.tag}</span>
-                        <span class="text-sm font-bold tracking-tight truncate max-w-[200px] sm:max-w-none text-slate-900">${adData.title}</span>
+                    <div class="ad-text-gold">
+                        AD: ${adData.title} — ${adData.description}
                     </div>
-                    <div class="ad-timer-pill" id="adCountdown">Ad: 5s</div>
+                    <div class="ad-timer-gold" id="adCountdown">5s</div>
                 </div>
                 <div class="ad-embed-area">
                     <img src="${adData.image}" alt="Ad Visual">
@@ -391,7 +388,7 @@
                 const timer = setInterval(() => {
                     timeLeft--;
                     const countdownEl = document.getElementById('adCountdown');
-                    if (countdownEl) countdownEl.textContent = `Ad: ${timeLeft}s`;
+                    if (countdownEl) countdownEl.textContent = `${timeLeft}s`;
                     if (timeLeft <= 0) {
                         clearInterval(timer);
                         videoContainer.innerHTML = '';
