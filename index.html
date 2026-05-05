@@ -48,7 +48,6 @@
             border-top: 4px solid #b38728;
         }
 
-        /* Simplified Ad Overlay */
         #adOverlay {
             position: absolute;
             top: 0;
@@ -64,31 +63,6 @@
         }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .ad-header {
-            background: #000;
-            padding: 14px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-            flex-shrink: 0;
-        }
-        .ad-text-gold {
-            color: #FFD700;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-            font-size: 13px;
-        }
-        .ad-timer-gold {
-            color: #FFD700;
-            font-weight: 900;
-            font-size: 12px;
-            border: 1px solid #FFD700;
-            padding: 2px 10px;
-            border-radius: 4px;
-        }
-        
         .ad-embed-area {
             flex-grow: 1;
             width: 100%;
@@ -163,7 +137,7 @@
                     <h4 class="font-bold text-slate-900 border-b pb-1 mb-3 uppercase text-[11px] tracking-widest">2. Parameter Permutations</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px]">
                         <div class="space-y-3">
-                            <h5 class="font-bold text-slate-800 text-xs uppercase text-xs">Primary Actions</h5>
+                            <h5 class="font-bold text-slate-800 text-xs uppercase">Primary Actions</h5>
                             <ul class="space-y-2">
                                 <li><code>&_ap</code> — Auto-load with Ads</li>
                                 <li><code>&_apn</code> — Auto-load (No Ads)</li>
@@ -344,12 +318,11 @@
             adContainer.id = 'adOverlay';
             adContainer.onclick = () => window.open(adData.url, '_blank');
             
+            // Simplified overlay logic: No black header div, just bold gold text and embedded visual
             adContainer.innerHTML = `
-                <div class="ad-header">
-                    <div class="ad-text-gold">
-                        AD: ${adData.title} — ${adData.description}
-                    </div>
-                    <div class="ad-timer-gold" id="adCountdown">5s</div>
+                <div style="padding: 15px; color: #FFD700; font-weight: 800; font-size: 14px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; width: 100%; flex-shrink: 0;">
+                    <span>AD: ${adData.title} — ${adData.description}</span>
+                    <span id="adCountdown">5s</span>
                 </div>
                 <div class="ad-embed-area">
                     <img src="${adData.image}" alt="Ad Visual">
@@ -436,6 +409,7 @@
 
         generateBtn.addEventListener('click', () => generateEmbed(true));
         copyLinkBtn.addEventListener('click', copyShareLink);
+        reloadBtn.addEventListener('click', () => generateEmbed(false));
     </script>
 </body>
-</html>
+</html>v
