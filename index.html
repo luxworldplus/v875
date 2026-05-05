@@ -76,8 +76,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* Premium Fallback Gradient */
-            background-image: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            background-color: #1a1a1a;
             color: white;
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
             position: relative;
@@ -131,7 +130,6 @@
         input:checked + .slider { background-color: #b38728; }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        /* Modal Styles */
         #infoModal {
             backdrop-filter: blur(4px);
             transition: all 0.3s ease;
@@ -152,48 +150,25 @@
                 </button>
             </div>
             <div class="p-6 max-h-[75vh] overflow-y-auto space-y-6 text-sm text-slate-600">
-                
                 <section>
                     <h4 class="font-bold text-slate-900 border-b pb-1 mb-3 uppercase text-[11px] tracking-widest">1. Standard Video Routing</h4>
-                    <p class="mb-2">Replace <code>youtube.com</code> with <code>player.luxworldplus.com/?</code> or <code>/??</code></p>
+                    <p class="mb-2">Replace <code>youtube.com</code> with <code>player.luxworldplus.com/?</code></p>
                     <div class="bg-slate-50 p-3 rounded-xl font-mono text-[10px] space-y-2 text-[#b38728]">
                         <div>player.luxworldplus.com/?watch?v=ID</div>
-                        <div>player.luxworldplus.com/??watch?v=ID</div>
-                        <div>player.luxworldplus.com/?v=ID</div>
-                        <div>player.luxworldplus.com/??v=ID</div>
-                        <div>player.luxworldplus.com/?ID</div>
+                        <div>player.luxworldplus.com/??/shorts/ID</div>
                         <div>player.luxworldplus.com/??ID</div>
                     </div>
                 </section>
-
                 <section>
-                    <h4 class="font-bold text-slate-900 border-b pb-1 mb-3 uppercase text-[11px] tracking-widest">2. Shorts & Embed Routing</h4>
-                    <p class="mb-2">Ensures slashes are treated as parameters to avoid server 404s.</p>
-                    <div class="bg-slate-50 p-3 rounded-xl font-mono text-[10px] space-y-2 text-[#b38728]">
-                        <div>player.luxworldplus.com/?/shorts/ID</div>
-                        <div>player.luxworldplus.com/??/shorts/ID</div>
-                        <div>player.luxworldplus.com/?/embed/ID</div>
-                    </div>
-                </section>
-
-                <section>
-                    <h4 class="font-bold text-slate-900 border-b pb-1 mb-3 uppercase text-[11px] tracking-widest">3. Parameter Permutations</h4>
+                    <h4 class="font-bold text-slate-900 border-b pb-1 mb-3 uppercase text-[11px] tracking-widest">2. Parameter Permutations</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px]">
                         <div class="space-y-3">
-                            <h5 class="font-bold text-slate-800 text-xs">Primary Actions</h5>
+                            <h5 class="font-bold text-slate-800 text-xs uppercase">Primary Actions</h5>
                             <ul class="space-y-2">
                                 <li><code>&_ap</code> — Auto-load with Ads</li>
                                 <li><code>&_apn</code> — Auto-load (No Ads)</li>
                                 <li><code>&_f</code> — Focus Mode (Clean Screen)</li>
                                 <li><code>&_fb</code> — Force Block Ads + Focus</li>
-                            </ul>
-                        </div>
-                        <div class="space-y-3">
-                            <h5 class="font-bold text-slate-800 text-xs">Mixed Combinations</h5>
-                            <ul class="space-y-1 font-mono text-blue-600">
-                                <li>...ID&_ap&_f</li>
-                                <li>...ID&_f&_fb</li>
-                                <li>...ID&_apn&_f</li>
                             </ul>
                         </div>
                     </div>
@@ -227,7 +202,7 @@
                     <path d="M10 15.5V8.5L16 12L10 15.5Z" fill="white"/>
                 </svg>
             </div>
-            <h1 class="text-3xl font-extrabold text-slate-900 mb-1">LUXPlayer</h1>
+            <h1 class="text-3xl font-extrabold text-slate-900 mb-1 tracking-tight">LUXPLAYER</h1>
             <p class="text-slate-500 text-sm font-medium italic">Premium Privacy Player</p>
         </div>
 
@@ -265,7 +240,7 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex flex-col sm:flex-row gap-3">
                         <button id="generateBtn" class="flex-1 bg-[#aa771c] hover:bg-[#8e6216] text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-md">
                             Preview Player
                         </button>
@@ -277,7 +252,7 @@
                 <div id="statusMsg" class="hidden mt-3 text-center text-xs font-medium py-3 rounded-lg border"></div>
             </div>
 
-            <div id="previewArea" class="hidden space-y-6">
+            <div id="previewArea" class="hidden space-y-6 pb-20">
                 <div class="glass-card p-6 rounded-2xl custom-shadow">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Active Player</h2>
@@ -287,7 +262,7 @@
                         </button>
                     </div>
                     <div id="previewWrapper" class="preview-wrapper">
-                        <div id="videoContainer" class="video-container"></div>
+                        <div id="videoContainer" class="video-container" style="width:100%; height:450px;"></div>
                     </div>
                 </div>
             </div>
@@ -344,14 +319,10 @@
             if (!url) return false;
             let p = url.trim();
             p = decodeURIComponent(p);
-            
-            // Check for direct 11-char ID in parameters to handle ?ID or ??ID
-            // Ensuring it's not just a setting flag (preceded by ? or ?? or &)
             const rawIdMatch = p.match(/(?:\?|\?\?|&)([a-zA-Z0-9_-]{11})(?:&|$)/);
-            if (rawIdMatch && !['_ap', '_apn', '_fb'].includes(rawIdMatch[1].substring(0,3))) {
+            if (rawIdMatch && !['_ap', '_apn', '_fb', '_f&'].includes(rawIdMatch[1].substring(0,3))) {
                 return rawIdMatch[1];
             }
-
             p = p.replace('??', '?').replace('?watch?v=', '?v=').replace('m.youtube.com', 'www.youtube.com');
             const reg = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?)|(shorts\/))\??v?=?([^#&?]*).*/;
             const match = p.match(reg);
@@ -371,11 +342,11 @@
             ad.onclick = () => window.open(adData.url, '_blank');
             ad.innerHTML = `
                 <div class="ad-timer" id="adCountdown">Ad: 5s</div>
-                <div class="ad-content" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('${adData.image}')">
+                <div class="ad-content" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('${adData.image}');">
                     <div class="ad-overlay-inner shadow-2xl">
                         <span class="bg-yellow-400 text-black text-[10px] font-black px-2 py-1 rounded mb-4 inline-block uppercase tracking-widest">${adData.tag}</span>
-                        <h2 class="text-3xl font-black uppercase mb-2 tracking-tighter">${adData.title}</h2>
-                        <p class="text-base font-medium opacity-90">${adData.description}</p>
+                        <h2 class="text-2xl sm:text-3xl font-black uppercase mb-2 tracking-tighter">${adData.title}</h2>
+                        <p class="text-sm font-medium opacity-90">${adData.description}</p>
                     </div>
                 </div>
             `;
@@ -400,17 +371,14 @@
             const videoId = extractVideoId(url);
             if (!videoId) return showMessage("Invalid YouTube link", true);
 
-            videoContainer.style.width = '100%';
-            videoContainer.style.height = '450px';
             videoContainer.innerHTML = '';
+            previewArea.classList.remove('hidden');
             
             const isNoAds = window.location.href.includes('_apn') || window.location.href.includes('_fb');
 
             if (adToggle.checked && !isNoAds) {
                 const ad = buildAdOverlay();
                 videoContainer.appendChild(ad);
-                previewArea.classList.remove('hidden');
-
                 let timeLeft = 5;
                 const timer = setInterval(() => {
                     timeLeft--;
@@ -424,49 +392,45 @@
                 }, 1000);
             } else {
                 videoContainer.appendChild(buildIframe(videoId));
-                previewArea.classList.remove('hidden');
             }
         }
 
         function copyShareLink() {
             const urlInput = videoUrlInput.value.trim();
             const videoId = extractVideoId(urlInput);
-            if (!videoId) return showMessage("Please enter a valid YouTube link first.", true);
+            if (!videoId) return showMessage("Enter a valid YouTube link first.", true);
             let shareUrl = `https://player.luxworldplus.com/?v=${videoId}`;
             if (!adToggle.checked) shareUrl += "&_fb"; 
             else shareUrl += "&_ap";
+            copyToClipboard(shareUrl, "Share URL copied!");
+        }
+
+        function copyToClipboard(text, msg) {
             const dummy = document.createElement("textarea");
             document.body.appendChild(dummy);
-            dummy.value = shareUrl;
+            dummy.value = text;
             dummy.select();
             document.execCommand("copy");
             document.body.removeChild(dummy);
-            showMessage("Share URL copied to clipboard!");
+            showMessage(msg);
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             const href = window.location.href;
             const search = window.location.search;
-            
-            // Only auto-fill if the URL specifically mentions YouTube-like structure
-            // This prevents environment hash/ids from filling the field
             const isVideoUrl = search.includes('v=') || search.includes('shorts/') || search.includes('watch?v=');
-            
             if (isVideoUrl) {
                 const scan = extractVideoId(href);
                 if (scan) {
                     videoUrlInput.value = "https://www.youtube.com/watch?v=" + scan;
                     const isAuto = href.includes('_ap') || href.includes('_apn') || href.includes('_f') || href.includes('_fb');
-                    if (isAuto) {
-                        setTimeout(() => generateEmbed(false), 500);
-                    }
+                    if (isAuto) setTimeout(() => generateEmbed(false), 500);
                 }
             }
         });
 
         generateBtn.addEventListener('click', () => generateEmbed(true));
         copyLinkBtn.addEventListener('click', copyShareLink);
-        reloadBtn.addEventListener('click', () => generateEmbed(false));
     </script>
 </body>
 </html>
