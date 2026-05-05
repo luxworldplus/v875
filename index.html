@@ -76,6 +76,8 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            /* Premium Fallback Gradient */
+            background-image: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: white;
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
             position: relative;
@@ -129,6 +131,7 @@
         input:checked + .slider { background-color: #b38728; }
         input:checked + .slider:before { transform: translateX(20px); }
 
+        /* Modal Styles */
         #infoModal {
             backdrop-filter: blur(4px);
             transition: all 0.3s ease;
@@ -170,7 +173,6 @@
                         <div>player.luxworldplus.com/?/shorts/ID</div>
                         <div>player.luxworldplus.com/??/shorts/ID</div>
                         <div>player.luxworldplus.com/?/embed/ID</div>
-                        <div>player.luxworldplus.com/??/embed/ID</div>
                     </div>
                 </section>
 
@@ -198,7 +200,7 @@
                 </section>
 
                 <section class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
-                    <h4 class="font-bold text-yellow-800 text-xs uppercase mb-1">New Interaction Feature</h4>
+                    <h4 class="font-bold text-yellow-800 text-xs uppercase mb-1">Interaction Feature</h4>
                     <p class="text-[11px] text-yellow-700">Right-clicking on the page opens the original video source on YouTube. If no video is active, a "No vid active" message is shown.</p>
                 </section>
             </div>
@@ -342,8 +344,14 @@
             if (!url) return false;
             let p = url.trim();
             p = decodeURIComponent(p);
-            const rawIdMatch = p.match(/(?:\?|\?\?)([a-zA-Z0-9_-]{11})(?:&|$)/);
-            if (rawIdMatch) return rawIdMatch[1];
+            
+            // Check for direct 11-char ID in parameters to handle ?ID or ??ID
+            // Ensuring it's not just a setting flag (preceded by ? or ?? or &)
+            const rawIdMatch = p.match(/(?:\?|\?\?|&)([a-zA-Z0-9_-]{11})(?:&|$)/);
+            if (rawIdMatch && !['_ap', '_apn', '_fb'].includes(rawIdMatch[1].substring(0,3))) {
+                return rawIdMatch[1];
+            }
+
             p = p.replace('??', '?').replace('?watch?v=', '?v=').replace('m.youtube.com', 'www.youtube.com');
             const reg = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?)|(shorts\/))\??v?=?([^#&?]*).*/;
             const match = p.match(reg);
@@ -363,7 +371,7 @@
             ad.onclick = () => window.open(adData.url, '_blank');
             ad.innerHTML = `
                 <div class="ad-timer" id="adCountdown">Ad: 5s</div>
-                <div class="ad-content" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5)), url('${adData.image}')">
+                <div class="ad-content" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('${adData.image}')">
                     <div class="ad-overlay-inner shadow-2xl">
                         <span class="bg-yellow-400 text-black text-[10px] font-black px-2 py-1 rounded mb-4 inline-block uppercase tracking-widest">${adData.tag}</span>
                         <h2 class="text-3xl font-black uppercase mb-2 tracking-tighter">${adData.title}</h2>
@@ -438,12 +446,20 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const href = window.location.href;
-            const isAuto = href.includes('_ap') || href.includes('_apn') || href.includes('_f') || href.includes('_fb');
-            if (isAuto) {
+            const search = window.location.search;
+            
+            // Only auto-fill if the URL specifically mentions YouTube-like structure
+            // This prevents environment hash/ids from filling the field
+            const isVideoUrl = search.includes('v=') || search.includes('shorts/') || search.includes('watch?v=');
+            
+            if (isVideoUrl) {
                 const scan = extractVideoId(href);
                 if (scan) {
                     videoUrlInput.value = "https://www.youtube.com/watch?v=" + scan;
-                    setTimeout(() => generateEmbed(false), 500);
+                    const isAuto = href.includes('_ap') || href.includes('_apn') || href.includes('_f') || href.includes('_fb');
+                    if (isAuto) {
+                        setTimeout(() => generateEmbed(false), 500);
+                    }
                 }
             }
         });
