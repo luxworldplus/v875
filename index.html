@@ -301,7 +301,6 @@
             { title: "Chase Sapphire", description: "The gold standard for travel rewards cards.", url: "https://www.luxworldplus.com/offers/chase", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&q=80&w=1470", tag: "OFFER" }
         ];
 
-        // Updated global context menu listener
         window.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             const videoId = extractVideoId(videoUrlInput.value.trim());
@@ -329,6 +328,12 @@
         function extractVideoId(url) {
             if (!url) return false;
             let p = url.trim();
+            p = decodeURIComponent(p);
+            // First check for 11 char ID directly as parameter or after ??
+            const rawIdMatch = p.match(/(?:\?|\?\?)([a-zA-Z0-9_-]{11})(?:&|$)/);
+            if (rawIdMatch) return rawIdMatch[1];
+
+            // Standard patterns
             p = p.replace('??', '?').replace('?watch?v=', '?v=').replace('m.youtube.com', 'www.youtube.com');
             const reg = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?)|(shorts\/))\??v?=?([^#&?]*).*/;
             const match = p.match(reg);
@@ -435,7 +440,8 @@
             if (isAuto) {
                 const scan = extractVideoId(href);
                 if (scan) {
-                    videoUrlInput.value = scan;
+                    // Populate with full URL instead of raw ID
+                    videoUrlInput.value = "https://www.youtube.com/watch?v=" + scan;
                     setTimeout(() => generateEmbed(false), 500);
                 }
             }
